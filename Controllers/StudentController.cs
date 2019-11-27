@@ -10,10 +10,7 @@ namespace MyMVCApplication.Controllers
 {
     public class StudentController : Controller
     {
-        // GET: Student
-        public ActionResult Index()
-        {
-            var studentList = new List<Student>{
+        List<Student> studentList = new List<Student>{
                             new Student() { StudentId = 1, StudentName = "John", Age = 18 } ,
                             new Student() { StudentId = 2, StudentName = "Steve",  Age = 21 } ,
                             new Student() { StudentId = 3, StudentName = "Bill",  Age = 25 } ,
@@ -23,7 +20,37 @@ namespace MyMVCApplication.Controllers
                             new Student() { StudentId = 4, StudentName = "Rob" , Age = 19 }
                         };
 
+        // GET: Student
+        public ActionResult Index()
+        {
+           
             return View(studentList);
+        }
+        public ActionResult Edit(int Id) {
+            var std = studentList.Where(s => s.StudentId == Id).FirstOrDefault();
+
+            return View(std);
+        }
+        [HttpPost]
+        public ActionResult Edit([Bind(Exclude = "Age")] Student std)
+        {
+            var name = std.StudentName;
+
+            //write code to update student 
+
+            return RedirectToAction("Index");
+        }
+        public ActionResult Details(int Id)
+        {
+            var std = studentList.Where(s => s.StudentId == Id).FirstOrDefault();
+
+            return View(std);
+        }
+        public ActionResult Delete(int Id)
+        {
+            var std = studentList.Where(s => s.StudentId == Id).FirstOrDefault();
+            
+            return View(std);
         }
     }
 }
