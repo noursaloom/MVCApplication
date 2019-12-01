@@ -10,34 +10,39 @@ namespace MyMVCApplication.Controllers
 {
     public class StudentController : Controller
     {
-        List<Student> studentList = new List<Student>{
+        private static List<Student> studentList = new List<Student>{
                             new Student() { StudentId = 1, StudentName = "John", Age = 18 } ,
                             new Student() { StudentId = 2, StudentName = "Steve",  Age = 21 } ,
                             new Student() { StudentId = 3, StudentName = "Bill",  Age = 25 } ,
                             new Student() { StudentId = 4, StudentName = "Ram" , Age = 20 } ,
                             new Student() { StudentId = 5, StudentName = "Ron" , Age = 31 } ,
-                            new Student() { StudentId = 4, StudentName = "Chris" , Age = 17 } ,
-                            new Student() { StudentId = 4, StudentName = "Rob" , Age = 19 }
+                            new Student() { StudentId = 6, StudentName = "Chris" , Age = 17 } ,
+                            new Student() { StudentId = 7, StudentName = "Rob" , Age = 19 }
                         };
 
         // GET: Student
         public ActionResult Index()
         {
-           
+            
+
+
             return View(studentList);
         }
-        public ActionResult Edit(int Id) {
-            var std = studentList.Where(s => s.StudentId == Id).FirstOrDefault();
+        public ActionResult Edit(int? id) {
+            var std = studentList.Where(slist => slist.StudentId == id).FirstOrDefault();
 
             return View(std);
         }
         [HttpPost]
-        public ActionResult Edit([Bind(Exclude = "Age")] Student std)
+        public ActionResult Edit(Student std)
         {
-            var name = std.StudentName;
-
-            //write code to update student 
-
+            
+            var student = studentList.Where(s => s.StudentId == std.StudentId).FirstOrDefault();
+          
+           
+            student.StudentName = std.StudentName;
+            student.Age= std.Age;
+            student.StudentId = std.StudentId;
             return RedirectToAction("Index");
         }
         public ActionResult Details(int Id)
@@ -46,11 +51,30 @@ namespace MyMVCApplication.Controllers
 
             return View(std);
         }
+
         public ActionResult Delete(int Id)
         {
-            var std = studentList.Where(s => s.StudentId == Id).FirstOrDefault();
-            
-            return View(std);
+            Student student = studentList.Where(st => st.StudentId == Id).FirstOrDefault();
+
+            return View(student);
         }
+        [HttpPost]
+        public ActionResult Delete(Student std)
+        {
+            if (studentList.Count > 0)
+                studentList.Remove(studentList.FirstOrDefault(t => t.StudentId == std.StudentId));
+
+
+            return RedirectToAction("Index",studentList);
+            //return View();
+
+            //var student = studentList.Where(s => s.StudentId == std.StudentId).FirstOrDefault();
+
+            //studentList.Remove(student);
+
+        }
+
+        
+
     }
 }
