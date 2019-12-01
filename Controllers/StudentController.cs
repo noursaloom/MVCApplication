@@ -23,10 +23,7 @@ namespace MyMVCApplication.Controllers
         // GET: Student
         public ActionResult Index()
         {
-            
-
-
-            return View(studentList);
+        return View(studentList);
         }
         public ActionResult Edit(int? id) {
             var std = studentList.Where(slist => slist.StudentId == id).FirstOrDefault();
@@ -36,35 +33,31 @@ namespace MyMVCApplication.Controllers
         [HttpPost]
         public ActionResult Edit(Student std)
         {
-            
-            var student = studentList.Where(s => s.StudentId == std.StudentId).FirstOrDefault();
-          
-           
-            student.StudentName = std.StudentName;
-            student.Age= std.Age;
-            student.StudentId = std.StudentId;
+            if (std.StudentId != 0)
+            {
+                var student = studentList.Where(s => s.StudentId == std.StudentId).FirstOrDefault();
+                student.StudentName = std.StudentName;
+                student.Age = std.Age;
+                student.StudentId = std.StudentId;
+            }
+            else {
+                std.StudentId = studentList.Max(x => x.StudentId) + 1;
+                studentList.Add(std);
+            }
             return RedirectToAction("Index");
         }
         public ActionResult Details(int Id)
         {
             var std = studentList.Where(s => s.StudentId == Id).FirstOrDefault();
-
             return View(std);
         }
-
         public ActionResult Delete(int Id)
         {
             var studentRemove = studentList.FirstOrDefault(x => x.StudentId == Id);
-
             if (studentRemove == null)
                 return View();
-
             studentList.Remove(studentRemove);
             return RedirectToAction("Index");
         }
-       
-
-        
-
     }
 }
