@@ -54,25 +54,15 @@ namespace MyMVCApplication.Controllers
 
         public ActionResult Delete(int Id)
         {
-            Student student = studentList.Where(st => st.StudentId == Id).FirstOrDefault();
+            var studentRemove = studentList.FirstOrDefault(x => x.StudentId == Id);
 
-            return View(student);
+            if (studentRemove == null)
+                return View();
+
+            studentList.Remove(studentRemove);
+            return RedirectToAction("Index");
         }
-        [HttpPost]
-        public ActionResult Delete(Student std)
-        {
-            if (studentList.Count > 0)
-                studentList.Remove(studentList.FirstOrDefault(t => t.StudentId == std.StudentId));
-
-
-            return RedirectToAction("Index",studentList);
-            //return View();
-
-            //var student = studentList.Where(s => s.StudentId == std.StudentId).FirstOrDefault();
-
-            //studentList.Remove(student);
-
-        }
+       
 
         
 
