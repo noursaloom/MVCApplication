@@ -63,7 +63,8 @@ namespace MyMVCApplication.Controllers
         {
             var studentRemove = studentList.FirstOrDefault(x => x.StudentId == std.StudentId);
             studentList.Remove(studentRemove);
-            return RedirectToAction("Index");
+           return RedirectToAction("Index");
+            
         }
     }
 }
