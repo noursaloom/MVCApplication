@@ -26,8 +26,11 @@ namespace MyMVCApplication.Controllers
         return View(studentList);
         }
         public ActionResult Edit(int? id) {
-            var std = studentList.Where(slist => slist.StudentId == id).FirstOrDefault();
-
+           var std = new Student();
+            if (id != null)
+            {
+                 std = studentList.Where(slist => slist.StudentId == id).FirstOrDefault();
+            }
             return View(std);
         }
         [HttpPost]
@@ -51,11 +54,14 @@ namespace MyMVCApplication.Controllers
             var std = studentList.Where(s => s.StudentId == Id).FirstOrDefault();
             return View(std);
         }
-        public ActionResult Delete(int Id)
+        public ActionResult Delete(int id) {
+           var std = studentList.Where(slist => slist.StudentId == id).FirstOrDefault();
+            return View(std);
+        }
+        [HttpPost]
+        public ActionResult Delete(Student std)
         {
-            var studentRemove = studentList.FirstOrDefault(x => x.StudentId == Id);
-            if (studentRemove == null)
-                return View();
+            var studentRemove = studentList.FirstOrDefault(x => x.StudentId == std.StudentId);
             studentList.Remove(studentRemove);
             return RedirectToAction("Index");
         }
