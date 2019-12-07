@@ -11,13 +11,13 @@ namespace MyMVCApplication.Controllers
     public class StudentController : Controller
     {
         private static List<Student> studentList = new List<Student>{
-                            new Student() { StudentId = 1, StudentName = "John", Age = 18 } ,
-                            new Student() { StudentId = 2, StudentName = "Steve",  Age = 21 } ,
-                            new Student() { StudentId = 3, StudentName = "Bill",  Age = 25 } ,
-                            new Student() { StudentId = 4, StudentName = "Ram" , Age = 20 } ,
-                            new Student() { StudentId = 5, StudentName = "Ron" , Age = 31 } ,
-                            new Student() { StudentId = 6, StudentName = "Chris" , Age = 17 } ,
-                            new Student() { StudentId = 7, StudentName = "Rob" , Age = 19 }
+                            new Student() { StudentId = 1, StudentName = "John", Age = 18 ,PhoneNumber="0787432071",EmailAddress="xx@gmail.com"} ,
+                            new Student() { StudentId = 2, StudentName = "Steve",  Age = 21,PhoneNumber="0784523698",EmailAddress="xx@gmail.com"} ,
+                            new Student() { StudentId = 3, StudentName = "Bill",  Age = 25 ,PhoneNumber="0123698714",EmailAddress="xx@gmail.com"} ,
+                            new Student() { StudentId = 4, StudentName = "Ram" , Age = 20,PhoneNumber="0778965412",EmailAddress="xx@gmail.com" } ,
+                            new Student() { StudentId = 5, StudentName = "Ron" , Age = 31,PhoneNumber="0778965412",EmailAddress="xx@gmail.com" } ,
+                            new Student() { StudentId = 6, StudentName = "Chris" , Age = 17,PhoneNumber="0778965412",EmailAddress="xx@gmail.com" } ,
+                            new Student() { StudentId = 7, StudentName = "Rob" , Age = 19,PhoneNumber="0778965412",EmailAddress="xx@gmail.com"}
                         };
 
         // GET: Student
@@ -39,15 +39,32 @@ namespace MyMVCApplication.Controllers
             if (std.StudentId != 0)
             {
                 var student = studentList.Where(s => s.StudentId == std.StudentId).FirstOrDefault();
-                student.StudentName = std.StudentName;
-                student.Age = std.Age;
-                student.StudentId = std.StudentId;
+                if (ModelState.IsValid)
+                {
+                    student.StudentName = std.StudentName;
+                    student.Age = std.Age;
+                    student.StudentId = std.StudentId;
+                    student.PhoneNumber = std.PhoneNumber;
+                    student.EmailAddress = std.EmailAddress;
+                    return RedirectToAction("Index");
+                }
+                else {
+
+                    return View(std);
+                }
             }
             else {
-                std.StudentId = studentList.Max(x => x.StudentId) + 1;
-                studentList.Add(std);
+                if (ModelState.IsValid)
+                {
+                    std.StudentId = studentList.Max(x => x.StudentId) + 1;
+                    studentList.Add(std);
+                }
+                else {
+                    return View(std);
+                }
+
             }
-            return RedirectToAction("Index");
+            return View(std);
         }
         public ActionResult Details(int Id)
         {
