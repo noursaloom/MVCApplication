@@ -15,10 +15,13 @@ namespace MyMVCApplication.Models
         [Required]
         [Range(5, 50, ErrorMessage = "Student Age must be between 5 and 50")]
         public int Age { get; set; }
-        [Phone]
-        public int PhoneNumber { get; set; }
-        [EmailAddress]
-        public string EmailAddress { get; set; }
+        [Required(ErrorMessage = "A phone number is required.")]
+        //[DataType(DataType.PhoneNumber, ErrorMessage = "Invalid Phone Number")]
+        [RegularExpression(@"^([0-9]{10})$", ErrorMessage = "Plz enter number in this format(##########)")]
+        public string MobileNumber { get; set; }
+        [Required]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$|^\+?\d{0,2}\-?\d{4,5}\-?\d{5,6}", ErrorMessage = "Please enter a valid email address")]
+        public string StudentEmail { get; set; }
     }
     
 
