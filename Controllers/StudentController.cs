@@ -37,9 +37,10 @@ namespace MyMVCApplication.Controllers
         [HttpPost]
         public ActionResult Edit(Student std)
         {
+            var student = studentList.Where(s => s.StudentId == std.StudentId).FirstOrDefault();
+
             if (std.StudentId != 0)
             {
-                var student = studentList.Where(s => s.StudentId == std.StudentId).FirstOrDefault();
                 if (ModelState.IsValid)
                 {//Edit Student
                     student.StudentName = std.StudentName;
@@ -59,9 +60,18 @@ namespace MyMVCApplication.Controllers
             {
                 //Add new Student
                 if (ModelState.IsValid)
-                {
-                    std.StudentId = studentList.Max(x => x.StudentId) + 1;
-                    studentList.Add(std);
+                {//Create (Duplicate name) validation
+                    bool nameAlreadyExists =studentList.Any(n=>n.StudentName == std.StudentName); ;
+                    if (nameAlreadyExists)
+                    { ModelState.AddModelError("StudentName", "StudentName already exists");
+                        return View(std);
+                    }
+
+                    else
+                    {
+                        std.StudentId = studentList.Max(x => x.StudentId) + 1;
+                        studentList.Add(std);
+                    }
                     return RedirectToAction("Index");
                 }
                 else
