@@ -25,6 +25,7 @@ namespace MyMVCApplication.Controllers
         {
             return View(studentList);
         }
+    
         public ActionResult Edit(int? id)
         {
             var std = new Student();
@@ -43,11 +44,19 @@ namespace MyMVCApplication.Controllers
             {
                 if (ModelState.IsValid)
                 {//Edit Student
+                 //   bool nameAlreadyExists = studentList.Any(n => n.StudentName == std.StudentName); 
+                    if (studentList.Any(n => n.StudentName == std.StudentName && n.StudentId != std.StudentId))
+                    {
+                        ModelState.AddModelError("StudentName", "StudentName already exists");
+                        return View(std);
+                    }
+                    else { 
                     student.StudentName = std.StudentName;
                     student.Age = std.Age;
                     student.StudentId = std.StudentId;
                     student.MobileNumber = std.MobileNumber;
                     student.StudentEmail = std.StudentEmail;
+                    }
                     return RedirectToAction("Index");
                 }
                 else
